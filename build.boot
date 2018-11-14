@@ -2,6 +2,7 @@
   :source-paths #{"src" "leihs-clj-shared/src"}
   :dependencies '[[hikari-cp "2.6.0"]
                   [honeysql "0.9.4"]
+                  [environ "1.1.0"]
                   [io.dropwizard.metrics/metrics-core "4.0.3"]
                   [io.dropwizard.metrics/metrics-healthchecks "4.0.3"]
                   [log4j/log4j "1.2.17" :exclusions [javax.mail/mail
