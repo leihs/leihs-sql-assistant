@@ -1,5 +1,6 @@
 (set-env!
   :source-paths #{"src" "leihs-clj-shared/src"}
+  :resource-paths #{"resources"}
   :dependencies '[[hikari-cp "2.6.0"]
                   [honeysql "0.9.4"]
                   [environ "1.1.0"]
