@@ -5,10 +5,12 @@
             [leihs.core.ds :as ds]
             [leihs.sql-assistant.run :as run]))
 
-(comment (run/init))
+(def ds (ds/get-ds))
 
-(-> (helpers/select :*)
-    (helpers/from :users)
-    (helpers/limit 1)
-    sql/format
-    (->> (jdbc/query (ds/get-ds))))
+(comment
+  (-> (helpers/select :*)
+      (helpers/from :users)
+      (helpers/limit 1)
+      sql/format
+      (->> (jdbc/query ds)))
+  )
