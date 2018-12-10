@@ -21,7 +21,7 @@
     ))
 
 (def defaults
-  {:LEIHS_MY_HTTP_BASE_URL "http://localhost:3240"
+  {:LEIHS_SQL_HTTP_BASE_URL "http://localhost:3250"
    :LEIHS_DATABASE_URL "jdbc:postgresql://leihs:leihs@localhost:5432/leihs?min-pool-size=1&max-pool-size=16"
    })
 
@@ -59,9 +59,9 @@
 
 (def cli-options
   [["-h" "--help"]
-   ["-b" "--http-base-url LEIHS_MY_HTTP_BASE_URL"
-    (str "default: " (:LEIHS_MY_HTTP_BASE_URL defaults))
-    :default (http-url/parse-base-url (env-or-default :LEIHS_MY_HTTP_BASE_URL))
+   ["-b" "--http-base-url LEIHS_SQL_HTTP_BASE_URL"
+    (str "default: " (:LEIHS_SQL_HTTP_BASE_URL defaults))
+    :default (http-url/parse-base-url (env-or-default :LEIHS_SQL_HTTP_BASE_URL))
     :parse-fn http-url/parse-base-url]
    ["-d" "--database-url LEIHS_DATABASE_URL"
     (str "default: " (:LEIHS_DATABASE_URL defaults))
