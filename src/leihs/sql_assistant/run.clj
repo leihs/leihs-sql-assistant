@@ -8,6 +8,7 @@
     [leihs.core.url.jdbc :as jdbc-url]
     [leihs.core.url.jdbc]
     
+    [leihs.sql-assistant.handler :as handler]
     [leihs.sql-assistant.status :as status]
 
     [clojure.tools.cli :as cli :refer [parse-opts]]
@@ -30,10 +31,13 @@
     (logging/info "Invoking run with options: " options)
     (shutdown/init options)
     (let [status (status/init)
-          ds (ds/init (:database-url options) (:health-check-registry status))
-          ; app-handler (routes/init)
-          ; http-server (http-server/start (:http-base-url options) app-handler)
-          ])))
+          ds (-> options
+                 :database-url
+                 (ds/init (:health-check-registry status)))
+          app-handler (handler/init)
+          http-server (-> options
+                          :http-base-url
+                          (http-server/start app-handler))])))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
