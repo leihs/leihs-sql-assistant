@@ -1,6 +1,8 @@
 (set-env!
   :source-paths #{"src" "leihs-clj-shared/src"}
   :resource-paths #{"resources"}
+  :project 'leihs-sql-assistant
+  :version "0.1.0-SNAPSHOT"
   :dependencies '[
                   [aleph "0.4.6"]
                   [bidi "2.1.3"]
@@ -33,7 +35,19 @@
                   ])
 
 (task-options!
-  pom {:project 'leihs-sql-assistant
-       :version "0.1.0"}
+  pom {:project (get-env :project)
+       :version (get-env :version)}
+  target {:dir #{"target"}}
   repl {:init-ns 'leihs.sql-assistant.main}
-  jar {:main 'leihs.sql-assistant.main})
+  aot {:all true}
+  jar {:file "leihs-sql-assistant.jar"
+       :main 'leihs.sql-assistant.main})
+
+(deftask uberjar
+  []
+  (comp 
+    (aot)
+    (pom)
+    (uber)
+    (jar)
+    (target)))
