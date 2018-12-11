@@ -16,3 +16,5 @@
 
 1. `boot run` given `export ...` (or accepting the defaults)
 2. Or passing command line arguments `boot [ run -- -d ... ]` (square brackets due to [this](https://github.com/boot-clj/boot/wiki/Task-Options-DSL#positional-parameters))
+
+**TBD**: `(deftask run ...)`
