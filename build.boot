@@ -35,11 +35,12 @@
                   ])
 
 (task-options!
-  pom {:project (get-env :project)
-       :version (get-env :version)}
+  ; pom {:project (get-env :project)
+  ;      :version (get-env :version)}
   target {:dir #{"target"}}
   repl {:init-ns 'leihs.sql-assistant.main}
   aot {:all true}
+  sift {:include #{#"leihs-sql-assistant.jar"}}
   jar {:file "leihs-sql-assistant.jar"
        :main 'leihs.sql-assistant.main})
 
@@ -47,7 +48,8 @@
   []
   (comp 
     (aot)
-    (pom)
+    ; (pom)
     (uber)
     (jar)
+    (sift)
     (target)))

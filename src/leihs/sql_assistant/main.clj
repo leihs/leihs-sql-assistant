@@ -6,9 +6,8 @@
     [leihs.sql-assistant.run :as run]
     [logbug.catcher :as catcher]
     [logbug.debug :as debug]
-    [logbug.thrown :as thrown]
-  ; (:gen-class)
-  ))
+    [logbug.thrown :as thrown])
+  (:gen-class))
 
 (thrown/reset-ns-filter-regex #"^(leihs|cider)\..*")
 
