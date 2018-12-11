@@ -45,11 +45,15 @@
        :main 'leihs.sql-assistant.main})
 
 (deftask uberjar
+  "Build an uberjar of the application."
   []
-  (comp 
-    (aot)
-    ; (pom)
-    (uber)
-    (jar)
-    (sift)
-    (target)))
+  (comp (aot) (uber) (jar) (sift) (target))) 
+
+; (require 'leihs.sql-assistant.main)
+; (deftask run
+;   "Run the application with given opts."
+;   []
+;   (with-pass-thru _
+;     (->> *args*
+;          (cons "run")
+;          (apply leihs.sql-assistant.main/-main))))
