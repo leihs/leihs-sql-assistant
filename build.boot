@@ -49,11 +49,11 @@
   []
   (comp (aot) (uber) (jar) (sift) (target))) 
 
-; (require 'leihs.sql-assistant.main)
-; (deftask run
-;   "Run the application with given opts."
-;   []
-;   (with-pass-thru _
-;     (->> *args*
-;          (cons "run")
-;          (apply leihs.sql-assistant.main/-main))))
+(require 'leihs.sql-assistant.main)
+(deftask run
+  "Run the application with given opts."
+  []
+  (->> *args*
+         (cons "run")
+         (apply leihs.sql-assistant.main/-main))
+  (wait))
