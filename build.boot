@@ -10,6 +10,7 @@
                   [clojure-humanize "0.2.2"]
                   [com.github.mfornos/humanize-slim "1.2.2"]
                   [compojure "1.6.1"]
+                  [hiccup "1.0.5"]
                   [hikari-cp "1.8.3"]
                   [honeysql "0.9.4"]
                   [environ "1.1.0"]
@@ -26,6 +27,7 @@
                   [org.clojure/java.jdbc "0.7.8"]
                   [org.clojure/tools.cli "0.3.7"]
                   [org.clojure/tools.logging "0.4.1"]
+                  [org.clojure/tools.namespace "0.3.0-alpha4"]
                   [org.slf4j/slf4j-log4j12 "1.7.25"]
                   [pandect "0.6.1"]
                   [pg-types "2.4.0-PRE.1"]
@@ -38,7 +40,7 @@
   ; pom {:project (get-env :project)
   ;      :version (get-env :version)}
   target {:dir #{"target"}}
-  repl {:init-ns 'leihs.sql-assistant.main}
+  repl {:init-ns 'user}
   aot {:all true}
   sift {:include #{#"leihs-sql-assistant.jar"}}
   jar {:file "leihs-sql-assistant.jar"
