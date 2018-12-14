@@ -73,7 +73,8 @@
       ;             :no-expire-paths [#".*font-awesome-[^\/]*\d\.\d\.\d\/.*"
       ;                                  #".+_[0-9a-f]{40}\..+"]
       ;             :enabled? (= env/env :prod)})
-      ring-exception/wrap))
+      ring-exception/wrap
+      ))
 
 ;#### debug ###################################################################
 ;(logging-config/set-logger! :level :debug)
