@@ -1,5 +1,6 @@
 (ns user
-  (:require [clojure.tools.namespace.repl :refer [refresh refresh-all]]
+  (:require [clojure.tools.logging :as log]
+            [clojure.tools.namespace.repl :refer [refresh refresh-all]]
             [leihs.sql-assistant.main :refer [-main]]
             [leihs.core.http-server :as http-server]))
 
@@ -12,5 +13,5 @@
                     @http-server/_server)))
 
 (defn reset []
-  (.close http-server)
+  (some-> http-server .close)
   (refresh :after 'user/start))

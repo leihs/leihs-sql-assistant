@@ -59,3 +59,14 @@
          (cons "run")
          (apply leihs.sql-assistant.main/-main))
   (wait))
+
+(require '[clojure.tools.namespace.repl :as ctnr])
+(require 'user)
+(deftask reset
+  "Reload all changed namespaces on the classpath.
+  and reset the application state."
+  []
+  (with-pass-thru _
+    (apply ctnr/set-refresh-dirs (get-env :directories))
+    (with-bindings {#'*ns* *ns*}
+      (user/reset))))
