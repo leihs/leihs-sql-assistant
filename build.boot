@@ -1,5 +1,7 @@
+(def base-source-paths #{"src/all" "src/dev" "leihs-clj-shared/src"})
+
 (set-env!
-  :source-paths #{"src/all" "leihs-clj-shared/src"}
+  :source-paths base-source-paths
   :resource-paths #{"resources"}
   :project 'leihs-sql-assistant
   :version "0.1.0-SNAPSHOT"
@@ -59,16 +61,12 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DEV ENV ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(deftask dev
-  []
-  (set-env! :source-paths #(conj % "src/dev"))
-  (replace-task! 
-    [r repl] (fn [& ks] (apply r :init-ns 'user ks)))
-  identity)
+(require 'user)
+
+(replace-task! 
+  [r repl] (fn [& ks] (apply r :init-ns 'user ks)))
 
 (require '[clojure.tools.namespace.repl :as ctnr])
-(merge-env! :source-paths #{"src/dev"})
-(require 'user)
 
 (deftask reset
   "Reload all changed namespaces on the classpath

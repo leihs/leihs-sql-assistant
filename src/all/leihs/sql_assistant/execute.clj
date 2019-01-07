@@ -7,19 +7,24 @@
             [hiccup.core :refer [html]]
             [leihs.sql-assistant.paths :refer [path]]))
 
+(def form [:form {:action "/sql/execute", :method :post}
+           [:textarea {:name :sql}]
+           [:br]
+           [:button {:type :submit} "Execute"]])
+
 (defn get [request]
   {:status 200
-   :body (html
-           [:form {:action "/sql/execute", :method :post}
-            [:textarea {:name :sql}]
-            [:br]
-            [:button {:type :submit} "Execute foo"]])})
+   :body (html form)})
 
 (defn post [request]
   (let [sql (-> request :params :sql)
         result (jdbc/query (get-ds) [sql])]
     {:status 200
-     :body result}))
+     :body (html
+            [:div
+             form
+             [:br]
+             result])}))
 
 (def routes
   (cpj/routes
