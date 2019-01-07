@@ -4,14 +4,9 @@
             [leihs.sql-assistant.main :refer [-main]]
             [leihs.core.http-server :as http-server]))
 
-(def http-server nil)
-
-(defn start []
-  (alter-var-root #'http-server
-                  (fn [_]
-                    (-main "run")
-                    @http-server/_server)))
+(defn start [] (-main "run"))
 
 (defn reset []
-  (some-> http-server .close)
+  (some-> @http-server/_server .close)
+  (some-> @http-server/_thread .stop)
   (refresh :after 'user/start))

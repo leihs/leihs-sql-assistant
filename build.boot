@@ -63,8 +63,8 @@
 (require '[clojure.tools.namespace.repl :as ctnr])
 (require 'user)
 (deftask reset
-  "Reload all changed namespaces on the classpath.
-  and reset the application state."
+  "Reload all changed namespaces on the classpath
+  and reset the application state continuously."
   []
   (with-pass-thru _
     (apply ctnr/set-refresh-dirs (get-env :directories))

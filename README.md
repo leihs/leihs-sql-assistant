@@ -6,7 +6,7 @@
 
 ## Start watcher/reset task
 
-`boot repl -s watch reset`
+`boot watch reset`
 
 It watches for changed files, then reloads them using `clojure.tools.namespace` and resets the application state as defined in `src/user.clj`. The only thing one has to do is to change a file, save it and refresh the page im browser.
 
