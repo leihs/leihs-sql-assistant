@@ -3,26 +3,32 @@
   (:require [clojure.tools.logging :as log]
             [clojure.java.jdbc :as jdbc]
             [leihs.core.ds :refer [get-ds]]
+            cheshire.core
             [compojure.core :as cpj]
             [hiccup.core :refer [html]]
             [leihs.sql-assistant.paths :refer [path]]))
 
-(def form [:form {:action "/sql/execute", :method :post}
-           [:textarea {:name :sql}]
-           [:br]
-           [:button {:type :submit} "Execute"]])
+(defn form
+  ([] (form nil))
+  ([value]
+   [:form {:action "/sql/execute", :method :post}
+    [:textarea {:name :sql} value]
+    [:br]
+    [:button {:type :submit} "Execute"]]))
 
 (defn get [request]
   {:status 200
-   :body (html form)})
+   :body (html (form))})
 
 (defn post [request]
   (let [sql (-> request :params :sql)
-        result (jdbc/query (get-ds) [sql])]
+        result (->> [sql]
+                    (jdbc/query (get-ds))
+                    cheshire.core/generate-string)]
     {:status 200
      :body (html
             [:div
-             form
+             (form sql)
              [:br]
              result])}))
 
