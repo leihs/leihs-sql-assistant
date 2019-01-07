@@ -9,4 +9,5 @@
 
 (defn reset []
   (some-> @http-server/_server .close)
-  (refresh :after 'user/start))
+  (when-let [ex (refresh :after 'user/start)] 
+    (clojure.repl/pst ex)))
