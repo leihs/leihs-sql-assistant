@@ -1,6 +1,8 @@
 (ns leihs.sql-assistant.execute
   (:refer-clojure :exclude [get])
   (:require [clojure.tools.logging :as log]
+            [clojure.java.jdbc :as jdbc]
+            [leihs.core.ds :refer [get-ds]]
             [compojure.core :as cpj]
             [hiccup.core :refer [html]]
             [leihs.sql-assistant.paths :refer [path]]))
@@ -11,12 +13,13 @@
            [:form {:action "/sql/execute", :method :post}
             [:textarea {:name :sql}]
             [:br]
-            [:button {:type :submit} "Execute Nitaai"]])})
+            [:button {:type :submit} "Execute foo"]])})
 
 (defn post [request]
-  (let [sql (-> request :params :sql)]
+  (let [sql (-> request :params :sql)
+        result (jdbc/query (get-ds) [sql])]
     {:status 200
-     :body "ok"}))
+     :body result}))
 
 (def routes
   (cpj/routes

@@ -1,5 +1,5 @@
 (set-env!
-  :source-paths #{"src" "leihs-clj-shared/src"}
+  :source-paths #{"src/all" "leihs-clj-shared/src"}
   :resource-paths #{"resources"}
   :project 'leihs-sql-assistant
   :version "0.1.0-SNAPSHOT"
@@ -37,10 +37,7 @@
                   ])
 
 (task-options!
-  ; pom {:project (get-env :project)
-  ;      :version (get-env :version)}
   target {:dir #{"target"}}
-  repl {:init-ns 'user}
   aot {:all true}
   sift {:include #{#"leihs-sql-assistant.jar"}}
   jar {:file "leihs-sql-assistant.jar"
@@ -56,12 +53,23 @@
   "Run the application with given opts."
   []
   (->> *args*
-         (cons "run")
-         (apply leihs.sql-assistant.main/-main))
+       (cons "run")
+       (apply leihs.sql-assistant.main/-main))
   (wait))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DEV ENV ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(deftask dev
+  []
+  (set-env! :source-paths #(conj % "src/dev"))
+  (replace-task! 
+    [r repl] (fn [& ks] (apply r :init-ns 'user ks)))
+  identity)
+
 (require '[clojure.tools.namespace.repl :as ctnr])
+(merge-env! :source-paths #{"src/dev"})
 (require 'user)
+
 (deftask reset
   "Reload all changed namespaces on the classpath
   and reset the application state continuously."
@@ -70,3 +78,7 @@
     (apply ctnr/set-refresh-dirs (get-env :directories))
     (with-bindings {#'*ns* *ns*}
       (user/reset))))
+
+(deftask focus
+  []
+  (comp (watch) (reset)))
