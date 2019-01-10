@@ -1,7 +1,5 @@
-(def base-source-paths #{"src/all" "src/dev" "leihs-clj-shared/src"})
-
 (set-env!
-  :source-paths base-source-paths
+  :source-paths  #{"boot/" "src/all" "src/dev" "leihs-clj-shared/src"}
   :resource-paths #{"resources"}
   :project 'leihs-sql-assistant
   :version "0.1.0-SNAPSHOT"
@@ -26,6 +24,7 @@
                   [logbug "4.2.2"]
                   [nilenso/honeysql-postgres "0.2.4"]
                   [org.bouncycastle/bcprov-jdk15on "1.54"]
+                  [org.clojure/data.generators "0.1.2"]
                   [org.clojure/java.jdbc "0.7.8"]
                   [org.clojure/tools.cli "0.3.7"]
                   [org.clojure/tools.logging "0.4.1"]
@@ -36,6 +35,7 @@
                   [ring "1.6.3"]
                   [ring-middleware-accept "2.0.3"]
                   [ring/ring-json "0.4.0"]
+                  [ring/ring-jetty-adapter "1.7.1"]
                   ])
 
 (task-options!
@@ -61,10 +61,10 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DEV ENV ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'user)
+(require 'app)
 
 (replace-task! 
-  [r repl] (fn [& ks] (apply r :init-ns 'user ks)))
+  [r repl] (fn [& ks] (apply r :init-ns 'app ks)))
 
 (require '[clojure.tools.namespace.repl :as ctnr])
 
@@ -75,7 +75,7 @@
   (with-pass-thru _
     (apply ctnr/set-refresh-dirs (get-env :directories))
     (with-bindings {#'*ns* *ns*}
-      (user/reset))))
+      (app/reset))))
 
 (deftask focus
   []

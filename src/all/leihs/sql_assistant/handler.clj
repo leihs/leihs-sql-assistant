@@ -8,7 +8,7 @@
     [leihs.core.auth.core :as auth]
     [leihs.core.shutdown :as shutdown]
 
-    [leihs.sql-assistant.execute :as execute]
+    [leihs.sql-assistant.queries :as queries]
     [leihs.sql-assistant.paths :refer [paths]]
     [leihs.sql-assistant.status :as status]
 
@@ -32,7 +32,8 @@
 ;   #{:status})
 
 (def resolve-table
-  {:execute execute/routes
+  {:queries queries/routes,
+   :abort-query queries/routes,
    :status status/routes})
 
 (defn wrap-default-content-type
@@ -59,7 +60,6 @@
       ; dispatch-content-type/wrap-accept
       routing/wrap-add-vary-header
       routing/wrap-resolve-handler
-      wrap-handler-with-logging
       routing/wrap-canonicalize-params-maps
       ring.middleware.params/wrap-params
       ; NOTE: we don't like `application/octet-stream` from `wrap-content-type`
