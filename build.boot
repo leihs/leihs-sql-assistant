@@ -50,24 +50,10 @@
   []
   (comp (aot) (uber) (jar) (sift) (target))) 
 
-(require 'leihs.sql-assistant.main)
-(deftask run
-  "Run the application with given opts."
-  []
-  (->> *args*
-       (cons "run")
-       (apply leihs.sql-assistant.main/-main))
-  (wait))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DEV ENV ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DEV ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'app)
-
-(replace-task! 
-  [r repl] (fn [& ks] (apply r :init-ns 'app ks)))
-
 (require '[clojure.tools.namespace.repl :as ctnr])
-
 (deftask reset
   "Reload all changed namespaces on the classpath
   and reset the application state continuously."
@@ -79,4 +65,13 @@
 
 (deftask focus
   []
-  (comp (watch) (reset)))
+  (comp (repl "-s") (watch) (reset)))
+
+(require 'leihs.sql-assistant.main)
+(deftask run
+  "Run the application with given opts."
+  []
+  (->> *args*
+       (cons "run")
+       (apply leihs.sql-assistant.main/-main))
+  (wait))
