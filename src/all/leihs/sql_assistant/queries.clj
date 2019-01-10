@@ -57,11 +57,11 @@
 (defn new-query [request]
   (let [q (-> request :params :query)
         uuid (str (cdg/uuid))
-        q-with-uuid (str q " -- " uuid)]
+        q-with-uuid (str "WITH query_id AS (SELECT '" uuid "') " q)]
     (-> (response
           (ring-io/piped-input-stream
             #(->> (io/make-writer % {})
-                  (json/generate-stream (query q)))))
+                  (json/generate-stream (query q-with-uuid)))))
         (header "X-Query-Id" uuid))))
 
 (def routes

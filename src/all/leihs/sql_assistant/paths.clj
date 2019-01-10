@@ -5,10 +5,11 @@
 (def paths
   (branch ""
           leihs.core.paths/core-paths
-          (branch "/sql/queries"
-                  (leaf "" :queries)
-                  (branch "/" (param :query-id)
-                          (leaf "/abort" :abort-query)))))
+          (branch "/sql"
+                  (branch "/queries"
+                          (leaf "" :queries)
+                          (branch "/" (param :query-id)
+                                  (leaf "/abort" :abort-query))))))
 
 (reset! leihs.core.paths/paths* paths)
 
