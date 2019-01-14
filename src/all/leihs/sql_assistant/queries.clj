@@ -22,34 +22,27 @@
 ;     [:br]
 ;     [:button {:type :submit} "Execute"]]))
 
-(defn cancel-pg-query [pid]
+(defn pg-cancel-query [pid]
   (-> (sql/select (sql/call :pg_cancel_backend pid))
       sql/format
-      (->> (jdbc/query (get-ds)))))
+      (->> (jdbc/query (get-ds)))
+      ))
 
-(defn find-pg-query [query-id]
+(defn pg-find-active-query [query-id]
   (-> (sql/select :*)
       (sql/from :pg_stat_activity)
       (sql/where [:and
                   ["~~*" :query (str "%" query-id "%")]
-                  [:not ["~~*" :query "%pg_stat_activity%"]]])
+                  [:not ["~~*" :query "%pg_stat_activity%"]]
+                  [:= :state "active"]])
       sql/format
       (->> (jdbc/query (get-ds)))
       first))
 
-(defn abort-query [{{query-id :query-id} :query-params}]
-  (log/debug
-    (-> (sql/select :*)
-        (sql/from :pg_stat_activity)
-        (sql/where [:and
-                    ["~~*" :query (str "%" query-id "%")]
-                    [:not ["~~*" :query "%pg_stat_activity%"]]])
-        sql/format
-        (->> (jdbc/query (get-ds)))))
-  (when-let [pg-q (find-pg-query query-id)]
-    (log/debug pg-q)
-    (cancel-pg-query (:pid pg-q)))
-  {:status 201})
+(defn abort-query [{{query-id :query-id} :route-params}]
+  (when-let [pg-q (pg-find-active-query query-id)]
+    (pg-cancel-query (:pid pg-q)))
+  {:status 204})
 
 (defn query [sql]
   (jdbc/query (get-ds) [sql]))
