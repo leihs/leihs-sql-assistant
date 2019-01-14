@@ -41,6 +41,7 @@
 (task-options!
   target {:dir #{"target"}}
   aot {:all true}
+  repl {:init-ns 'leihs.sql-assistant.main}
   sift {:include #{#"leihs-sql-assistant.jar"}}
   jar {:file "leihs-sql-assistant.jar"
        :main 'leihs.sql-assistant.main})
