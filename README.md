@@ -4,7 +4,13 @@
 
 `boot repl`
 
-This throws you into `app` namespace. From there you can first manually `(start)` and then `(reset)` the global application state whenever needed.
+This throws you into `leihs.sql-assistant.main` namespace.
+
+## Start watcher/reset task
+
+`boot focus`
+
+It watches for changed files, then reloads them using `clojure.tools.namespace` and resets the global application state as defined in `boot/app.clj`. The only thing one has to do is to change a file, save it and refresh the page im browser.
 
 NOTE: Beware vim users! The reset blows away all your namespace definitions added interactively. You can disable this behaviour for a particular namespace by:
 
@@ -14,12 +20,6 @@ NOTE: Beware vim users! The reset blows away all your namespace definitions adde
 ```
 
 For more information see [clojure.tools.namespace](https://github.com/clojure/tools.namespace).
-
-## Start watcher/reset task
-
-`boot watch reset` or `boot focus` ;-)
-
-It watches for changed files, then reloads them using `clojure.tools.namespace` and resets the global application state as defined in `boot/app.clj`. The only thing one has to do is to change a file, save it and refresh the page im browser.
 
 ## Build uberjar
 
