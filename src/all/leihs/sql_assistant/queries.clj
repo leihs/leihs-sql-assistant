@@ -47,14 +47,14 @@
 (defn query [sql]
   (jdbc/query (get-ds) [sql]))
 
-(defn new-query [request]
-  (let [q (-> request :params :query)
-        uuid (str (cdg/uuid))
+(defn new-query [{{q :query, s :sleep} :params}]
+  (let [uuid (str (cdg/uuid))
         q-with-uuid (str "WITH query_id AS (SELECT '" uuid "') " q)]
     (-> (response
           (ring-io/piped-input-stream
-            #(->> (io/make-writer % {})
-                  (json/generate-stream (query q-with-uuid)))))
+            #(do (Thread/sleep (or s 0))
+                 (->> (io/make-writer % {})
+                      (json/generate-stream (query q-with-uuid))))))
         (header "X-Query-Id" uuid))))
 
 (def routes
