@@ -65,7 +65,9 @@
 
 (deftask focus
   []
-  (comp (repl "-s") (watch) (reset)))
+  (comp (repl "-s")
+        (watch)
+        (reset)))
 
 (require 'leihs.sql-assistant.main)
 (deftask run
