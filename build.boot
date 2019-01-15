@@ -1,5 +1,5 @@
 (set-env!
-  :source-paths  #{"boot/" "src/all" "src/dev" "leihs-clj-shared/src"}
+  :source-paths #{"src/all" "leihs-clj-shared/src"}
   :resource-paths #{"resources"}
   :project 'leihs-sql-assistant
   :version "0.1.0-SNAPSHOT"
@@ -51,30 +51,39 @@
   []
   (comp (aot) (uber) (jar) (sift) (target))) 
 
+(deftask run
+  "Run the application with given opts."
+  []
+  (require 'leihs.sql-assistant.main)
+  (->> *args*
+       (cons "run")
+       (apply (resolve 'leihs.sql-assistant.main/-main)))
+  (wait))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; DEV ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'app)
-(require '[clojure.tools.namespace.repl :as ctnr])
+(deftask dev
+  []
+  (set-env! :source-paths #(conj % "boot" "src/dev"))
+  (require 'app
+           '[clojure.tools.namespace.repl :as ctnr])
+  identity)
+
 (deftask reset
   "Reload all changed namespaces on the classpath
   and reset the application state continuously."
   []
+  ; use `resolve` because of dynamic `require` (not top-level):
+  ; https://github.com/boot-clj/boot/wiki/Boot-Troubleshooting#why-isnt-require-working-in-my-pod
   (with-pass-thru _
-    (apply ctnr/set-refresh-dirs (get-env :directories))
+    (apply (resolve 'ctnr/set-refresh-dirs)
+           (get-env :directories))
     (with-bindings {#'*ns* *ns*}
-      (app/reset))))
+      ((resolve 'app/reset)))))
 
 (deftask focus
   []
-  (comp (repl "-s")
+  (comp (dev)
+        (repl "-s")
         (watch)
         (reset)))
-
-(require 'leihs.sql-assistant.main)
-(deftask run
-  "Run the application with given opts."
-  []
-  (->> *args*
-       (cons "run")
-       (apply leihs.sql-assistant.main/-main))
-  (wait))

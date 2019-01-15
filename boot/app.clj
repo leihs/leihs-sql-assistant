@@ -1,7 +1,8 @@
 (ns app
   (:require [clojure.tools.logging :as log]
             [clojure.tools.namespace.repl :refer [refresh]]
-            [leihs.sql-assistant.main :refer [-main]]))
+            [leihs.sql-assistant.main :refer [-main]]
+            clojure.repl))
 
 (defn run []
   (-main "run"))
